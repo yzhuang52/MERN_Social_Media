@@ -9,17 +9,26 @@ import useStyles from './styles';
 import {useDispatch} from "react-redux";
 import Icon from  './icon';
 import {AUTH} from '../../constants/actionTypes';
+import {signup, signin} from '../../actions/auth';
+
 function Auth(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const initState = {firstName: '', lastName: '', email: '', password: '', confirmPassword: ''};
     const [isSignup, setIsSignup] = useState(false);
+    const [formData, setFormData] = useState(initState);
     const [showPassWord, setShowPassWord] = useState(false);
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if(isSignup) {
+            dispatch(signup(formData, navigate));
+        }else{
 
+        }
     }
-    const handleChange = () => {
-
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.name]: e.target.value});
     }
     const handleShowPassword = () => {
         setShowPassWord((prev) => !prev);
@@ -55,8 +64,8 @@ function Auth(props) {
                         {
                             isSignup && (
                                 <>
-                                    <Input name="firstName" label="firstName" handleChange={handleChange} autoFocus half/>
-                                    <Input name="firstName" label="firstName" handleChange={handleChange} half/>
+                                    <Input name="firstName" label="first Name" handleChange={handleChange} autoFocus half/>
+                                    <Input name="lastName" label="last Name" handleChange={handleChange} half/>
 
                                 </>
                             )
