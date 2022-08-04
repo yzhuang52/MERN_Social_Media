@@ -24,7 +24,7 @@ function Auth(props) {
         if(isSignup) {
             dispatch(signup(formData, navigate));
         }else{
-
+            dispatch(signin(formData, navigate));
         }
     }
     const handleChange = (e) => {
@@ -35,12 +35,12 @@ function Auth(props) {
     }
     const switchMode = () => {
         setIsSignup((prev) => !prev);
-        handleShowPassword(false)
+        setShowPassWord(false)
     }
     const GoogleSuccess = async (res) => {
         const decoded = jwt_decode(res.credential);
-        const result = {'email': decoded.email, 'familyName': decoded.family_name, 'givenName': decoded.given_name, 'name': decoded.name, 'imageUrl': decoded.picture}
-        const token = {'token': res.credential};
+        const result = {'email': decoded.email, 'familyName': decoded.family_name, 'givenName': decoded.given_name, 'name': decoded.name, 'imageUrl': decoded.picture, '_id': decoded.sub}
+        const token = res.credential;
         try{
             dispatch({type: AUTH, data: {result, token}})
             navigate('/');
