@@ -10,10 +10,11 @@ API.interceptors.request.use((request) => {
 })
 
 
-export const fetchPosts = () => API.get('/posts');
+export const fetchPosts = (page) => API.get(`/posts?page=${page}`);
 export const updatePost = (id, postData) => API.patch(`/posts/${id}`, postData);
 export const createPost = (newPost) => API.post('/posts', newPost);
 export const deletePost = (id) => API.delete(`/posts/${id}`);
 export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
 export const signin = (formData) => API.post('/users/signin', formData);
 export const signup = (formData) => API.post('/users/signup', formData);
+export const fetchPostsBySearch = (searchQuery) => API.get(`/posts/search?searchQuery=${searchQuery.search||'none'}&tags=${searchQuery.tags}`);

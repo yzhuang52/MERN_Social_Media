@@ -2,14 +2,29 @@ import mongoose from 'mongoose';
 import PostMessage from '../models/postMessages.js';
 
 export const getPosts = async (request, response) => {
+    const {page} = request.query;
     try {
-        const postMessages = await PostMessage.find();
-        response.status(200).json(postMessages);
+        const LIMIT = 8;
+        const startIndex = (Number(page)-1)*LIMIT;
+        const total = await PostMessage.countDocuments({});
+        const posts = await PostMessage.find().sort({_id: -1}).limit(LIMIT).skip(startIndex);
+        response.status(200).json({data: posts, currentPage: Number(page), numberOfPage: Math.ceil(total/LIMIT)});
         
     } catch (error) {
         response.status(404).json({message: error.message})
     }
 } 
+
+export const getPostsBySearch = async (request, response) => {
+    const {searchQuery, tags} = request.query;
+    try {
+        const title = new RegExp(searchQuery, 'i');
+        const posts = await PostMessage.find({$or: [{title}, {tags: {$in: tags.split(',')}}]});
+        response.json({data: posts});
+    } catch (error) {
+        response.status(404).json({message: error.message});
+    }
+}
 
 export const createPost = async (request, response) => {
     const post = request.body;
