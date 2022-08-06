@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import moment from 'moment';
 import {useParams, useNavigate} from "react-router-dom";
 import useStyles from './styles';
-import {getPost} from "../actions/posts";
+import {getPost, getPostBySearch} from "../actions/posts";
 
 function PostDetails(props) {
     const { post, posts, isLoading} = useSelector((state)=>state.posts);
@@ -15,6 +15,16 @@ function PostDetails(props) {
     useEffect(() => {
         dispatch(getPost(id));
     }, [dispatch]);
+
+    useEffect(() => {
+        if(post) {
+            dispatch(getPostBySearch({search: 'none', tags: post?.tags.join(",")}))
+        }
+    }, [post]);
+    const openPost = (title, _id) => {
+        console.log(title);
+        navigate(`/posts/${_id}`);
+    }
     if(!post){
         return null;
     }
@@ -23,6 +33,9 @@ function PostDetails(props) {
             <CircularProgress size="7em"/>
         </Paper>)
     }
+
+    const recommendedPosts = posts.filter(({_id})=>_id!==post._id);
+
     return (
         <Paper style={{ padding: '20px', borderRadius: '15px' }} elevation={6}>
             <div className={classes.card}>
@@ -42,6 +55,19 @@ function PostDetails(props) {
                     <img className={classes.media} src={post.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} alt={post.title} />
                 </div>
             </div>
+            {recommendedPosts.length && (
+                <div className={classes.section}>
+                    <Typography gutterBottom variant="h5">You might also like:</Typography>
+                    <Divider/>
+                    <div className={classes.recommendedPosts}>
+                        {recommendedPosts.map(({title, message, name, likes, selectedFile, _id}) => (
+                            <div style={{margin: '20px', cursor: 'pointer'}} onClick={()=>openPost(title, _id)} key={_id}>
+                                {title}
+                            </div>
+                            ))}
+                    </div>
+                </div>
+            )}
         </Paper>
     );
 }
