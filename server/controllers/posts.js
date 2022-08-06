@@ -1,6 +1,18 @@
 import mongoose from 'mongoose';
 import PostMessage from '../models/postMessages.js';
 
+
+export const getPost = async (request, response) => {
+    const { id } = request.params;
+    try {
+        const Post = await PostMessage.findById(id);
+        console.log(Post);
+        response.status(200).json(Post);
+    } catch (error) {
+        response.status(404).json({message: error.message});
+    }
+}
+
 export const getPosts = async (request, response) => {
     const {page} = request.query;
     try {

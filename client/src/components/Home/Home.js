@@ -76,7 +76,7 @@ function Home(props) {
                         </AppBar>
                         <Form currentId={currentId} setCurrentId={setCurrentId}/>
                         {(!searchQuery && !tags.length) && (
-                            <Paper  elevation={6} class={classes.pagination}>
+                            <Paper  elevation={6} className={classes.pagination}>
                                 <Paginaton page={page}/>
                             </Paper>
                         )}
