@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar/navbar";
 import {BrowserRouter, Route, Routes, Navigate} from 'react-router-dom';
 import Auth from "./components/Auth/Auth";
 import {GoogleOAuthProvider} from "@react-oauth/google";
-import PostDetails from "./PostDetails/PostDetails";
+import PostDetails from "./components/PostDetails/PostDetails";
 export default function App() {
     const user = JSON.parse(localStorage.getItem('profile'));
 

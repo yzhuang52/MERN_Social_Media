@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useStyles from "./styles";
 import { Card, CardActions, CardMedia, Typography, Button, CardContent, ButtonBase } from '@material-ui/core';
 import moment from 'moment';
@@ -15,6 +15,7 @@ export default function Post({post, setCurrentId}) {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem('profile'));
   const navigate = useNavigate();
+  const [likes, setLikes] = useState(post?.likes);
     const Likes = () => {
         if (post.likes.length > 0) {
             return post.likes.find((like) => like === (user?.result?.googleId || user?.result?._id))
@@ -30,6 +31,16 @@ export default function Post({post, setCurrentId}) {
     }
     const openPost = () => {
         navigate(`/posts/${post._id}`);
+    }
+    const userId = user?.result?.googleId || user?.result?._id;
+    const hasLikedPost = post.likes.find( (like)=> like===(user?.result?.googleId || user?.result?._id));
+    const handleClick = () => {
+        dispatch(deletePost(post._id));
+        if(hasLikedPost){
+            setLikes(post.likes.filter( (id) => id!==userId));
+        } else {
+            setLikes([...post.likes, userId]);
+        }
     }
   return (
     <Card className={classes.card} raised elevation={6}>
@@ -59,7 +70,7 @@ export default function Post({post, setCurrentId}) {
             <Likes/>
         </Button>
           {(user?.result?.googleId===post?.creator || user?.result?._id===post?.creator) && (
-              <Button size="small" color="primary" onClick={()=>dispatch(deletePost(post._id))} disabled={!user?.result}>
+              <Button size="small" color="primary" onClick={handleClick} disabled={!user?.result}>
                   <DeleteIcon fontSize="small"/>Delete
               </Button>
           )}

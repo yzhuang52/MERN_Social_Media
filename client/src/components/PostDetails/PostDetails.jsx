@@ -4,7 +4,8 @@ import {useDispatch, useSelector} from "react-redux";
 import moment from 'moment';
 import {useParams, useNavigate} from "react-router-dom";
 import useStyles from './styles';
-import {getPost, getPostBySearch} from "../actions/posts";
+import {getPost, getPostBySearch} from "../../actions/posts";
+import CommentSection from "./CommentSection";
 
 function PostDetails(props) {
     const { post, posts, isLoading} = useSelector((state)=>state.posts);
@@ -33,7 +34,7 @@ function PostDetails(props) {
             <CircularProgress size="7em"/>
         </Paper>)
     }
-
+    console.log(posts);
     const recommendedPosts = posts.filter(({_id})=>_id!==post._id);
 
     return (
@@ -48,7 +49,7 @@ function PostDetails(props) {
                     <Divider style={{ margin: '20px 0' }} />
                     <Typography variant="body1"><strong>Realtime Chat - coming soon!</strong></Typography>
                     <Divider style={{ margin: '20px 0' }} />
-                    <Typography variant="body1"><strong>Comments - coming soon!</strong></Typography>
+                    <CommentSection post={post}/>
                     <Divider style={{ margin: '20px 0' }} />
                 </div>
                 <div className={classes.imageSection}>
